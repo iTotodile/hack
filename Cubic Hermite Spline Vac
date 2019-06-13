@@ -1,0 +1,13 @@
+[ENABLE]
+// 55 8b ec 66 0f 6e 6d 08 [1.00] [Below]
+// CalcHermiteSplineCoeff called in CMovePath::CalcPassivePos
+018AC632:
+shufps xmm3,xmm3,00 // http://x86.renejeschke.de/html/file_module_x86_id_294.html
+nop
+nop
+nop
+nop
+
+[DISABLE]
+018AC632:
+addsd xmm0,[0318FA08]
