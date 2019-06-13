@@ -1,0 +1,14 @@
+//No Crusader Codex
+[Enable]
+02C3424F:
+db 90 E9
+
+02B76D1E:
+db 90 E9
+
+[Disable]
+02C3424F: //  0F ? ? ? FF FF 8B ? ? 5F 8B ? ? 8B
+db 0F 85
+
+02B76D1E: //  0F 85 ? ? ? ? 83 ? ? 0F 84 ? ? ? ? 85
+db 0F 85
