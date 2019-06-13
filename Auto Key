@@ -1,0 +1,55 @@
+[Enable]
+define(VK_CONTROL,001D0000)
+define(VK_RSHIFT,002A0000)
+define(VK_INSERT,01520000)
+define(VK_DELETE,01530000)
+define(VK_HOME,01470000)
+define(VK_END,014F0000)
+define(VK_PRIOR,01490000)﻿)
+define(VK_NEXT,01510000)
+
+alloc(hook,128)
+alloc(PressKey,128)
+alloc(timer,4)
+label(update)
+label(return)
+
+timer:
+dd 0
+
+hook:
+call GetTickCount
+mov edx,eax
+sub edx, [timer]
+cmp edx, #5 // change delay here
+jl return
+mov [timer], eax
+pushad
+mov edx,001D0000 // change key here
+call PressKey
+popad
+jmp return
+
+PressKey:
+mov esi,[0385213C] // TSingletonCWvsContext 8B 0D ?? ?? ?? ?? 50 E8 ?? ?? ?? ?? 8D 4D ?? E8 ?? ?? ?? ?? 8B 4D ?? 64 89 0D ?? ?? ?? ?? 59
+mov ecx,[esi+A4]
+push edx
+push 00
+call 02A65490 // CWndMan::OnKey 55 8B EC 8B 0D ?? ?? ?? ?? 85 C9 74 ?? 83 C1 ?? [First]
+ret
+
+update:
+push 02ED1758 // Original opcode
+jmp return
+
+017E90E5: // CMob::Update (only calls when in maps with mobs, useful if you get stuck in town while map rushing)
+jmp hook
+return:
+
+[Disable]
+017E90E5: //68 ?? ?? ?? ?? 64 A1 00 00 00 00 50 81 ?? ?? ?? ?? ?? a1 ?? ?? ?? ?? 33 ?? 89 ? ? 53 56 57 50 8d ? ? 64 ? ? ? ? ? 8b ? 89 ? ? ? ? ? 33 c0  [second]
+push 02ED1758
+db 64 A1 00 00 00 00
+
+dealloc(hook)
+dealloc(PressKey)
